@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGENT DÉPLOYER - Automatisation CI/CD avec n8n</title>
+    <style>
+        :root {
+            --primary-color: #0D1B2A;
+            --secondary-color: #1B263B;
+            --accent-color: #00FFD1;
+            --text-color: #E0E1DD;
+            --card-bg: #2a3a4a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 0;
+        }
+
+        h1, h2, h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            background-color: #fff;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(rgba(13, 27, 42, 0.8), rgba(13, 27, 42, 1)), url('https://www.n8n.io/wp-content/uploads/2023/03/n8n-is-source-available.jpg') no-repeat center center/cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Problem & Solution Section */
+        #problem {
+            background-color: var(--secondary-color);
+        }
+        .problem-solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .problem-list li {
+            margin-bottom: 1rem;
+            list-style: none;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .problem-list li::before {
+            content: '❌';
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+        }
+        .solution-list li {
+             margin-bottom: 1rem;
+            list-style: none;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .solution-list li::before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+        .deployment-visual {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .deployment-visual h4 {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        .visual-path {
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        .manual-path {
+            background: #ff6b6b20;
+            border: 1px dashed #ff6b6b;
+            color: #ff6b6b;
+        }
+        .auto-path {
+            background: #00ffd120;
+            border: 1px dashed var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* How it works */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        .process-step {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            border-top: 4px solid var(--accent-color);
+        }
+        .process-step .step-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Services Section */
+        #services {
+             background-color: var(--secondary-color);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .service-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        .service-card h3 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .testimonial-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .testimonial-card blockquote {
+            font-style: italic;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        .testimonial-card cite {
+            font-weight: bold;
+            color: var(--accent-color);
+            align-self: flex-end;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .footer-links {
+            margin-bottom: 1.5rem;
+        }
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+        .footer .btn {
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .problem-solution-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Header / Hero Section -->
+    <header id="home">
+        <div class="container hero-content">
+            <h1>AGENT DÉPLOYER : L'Automatisation CI/CD par les Workflows n8n.</h1>
+            <p class="subtitle">Dites adieu aux déploiements manuels. Concentrez-vous sur le code, nous gérons la livraison, de votre dépôt à la production, sans erreur.</p>
+            <a href="#contact" class="btn cta-main">Demander mon Audit CI/CD Gratuit</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- 2. Problem & Solution Section -->
+        <section id="problem" class="container">
+            <h2>Votre Déploiement vous Coûte-t-il Trop Cher ?</h2>
+            <div class="problem-solution-grid">
+                <div>
+                    <h3>Les Problèmes Courants</h3>
+                    <ul class="problem-list">
+                        <li>Erreurs humaines fréquentes lors des mises en production.</li>
+                        <li>Temps précieux perdu dans des processus manuels et répétitifs.</li>
+                        <li>Manque de fiabilité et stress à chaque déploiement.</li>
+                        <li>Difficulté à maintenir la cohérence entre les environnements.</li>
+                    </ul>
+                     <h3>Notre Solution Automatisée</h3>
+                    <ul class="solution-list">
+                        <li>Fiabilité à 99.9% grâce à des workflows testés.</li>
+                        <li>Gain de temps immédiat pour vos équipes de développement.</li>
+                        <li>Déploiements sereins, en un seul clic ou entièrement automatisés.</li>
+                        <li>Synchronisation parfaite de votre chaîne CI/CD.</li>
+                    </ul>
+                </div>
+                <div class="deployment-visual">
+                    <h4>Processus de Déploiement</h4>
+                    <div class="visual-path manual-path">
+                        Git Push ➔ SSH ➔ Pull ➔ Build ➔ Test? ➔ Erreur ➔ Recommencer...
+                    </div>
+                    <h4>VS</h4>
+                    <div class="visual-path auto-path">
+                        Git Push ➔ AGENT DÉPLOYER ➔ Déployé !
+                    </div>
+                </div>
+            </div>
+        </section> 
+
+        <!-- 3. How It Works Section -->
+        <section id="process" class="container">
+            <h2>Notre Processus en 3 Étapes</h2>
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Audit de votre Stack</h3>
+                    <p>Nous analysons votre architecture actuelle : dépôts (GitHub, GitLab), plateformes d'hébergement (Vercel, Netlify, serveurs privés via SSH) et vos besoins spécifiques.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Création du Workflow n8n</h3>
+                    <p>Nous concevons un workflow n8n sur mesure qui s'intègre parfaitement à vos outils, automatisant chaque étape : du test à la mise en production.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Go Live & Formation</h3>
+                    <p>Nous déployons le système d'automatisation et formons votre équipe pour qu'elle soit 100% autonome. Vous gardez le contrôle, sans la charge manuelle.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Our Services Section -->
+        <section id="services" class="container">
+            <h2>Nos Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Mise en Place de Workflows CI/CD</h3>
+                    <p>Création de pipelines complets pour automatiser la compilation, les tests et le déploiement de vos applications web, du simple site statique à l'application complexe.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Intégration de Plateformes</h3>
+                    <p>Nous connectons vos outils préférés. Que vous utilisiez Netlify, Vercel, AWS, ou un serveur dédié via SSH, nous assurons une intégration fluide avec n8n.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Support et Maintenance</h3>
+                    <p>Nous offrons un support continu pour garantir que vos workflows restent performants et évoluent avec vos besoins. La tranquillité d'esprit assurée.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Case Studies / Testimonials Section -->
+        <section id="testimonials" class="container">
+            <h2>Ils nous font confiance</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <blockquote>"AGENT DÉPLOYER a transformé notre flux de travail. Nous avons réduit les erreurs de déploiement de 95% et nos développeurs peuvent enfin se concentrer sur l'essentiel."</blockquote>
+                    <cite>– Agence Web Alpha</cite>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>"Le gain de temps est phénoménal. Ce qui nous prenait des heures chaque semaine est maintenant une affaire de minutes. Un service indispensable pour toute startup."</blockquote>
+                    <cite>– Startup Beta</cite>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>"En tant que freelance, l'automatisation est la clé de ma productivité. Le workflow n8n mis en place est robuste, fiable et m'a permis de gérer plus de clients."</blockquote>
+                    <cite>– Freelance Gamma</cite>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 6. Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#services">Services</a>
+                <a href="#contact">Contact</a>
+                <a href="#process">À Propos</a>
+            </div>
+            <p>AGENT DÉPLOYER - Simplifiez votre CI/CD.</p>
+            <a href="#" class="btn cta-secondary">Passer à l'Automatisation</a>
+            <p style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.6;">© 2025 AGENT DÉPLOYER. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Simple CTA alert for demonstration
+            const ctaButtons = document.querySelectorAll('.btn');
+            ctaButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    if(e.target.classList.contains('cta-main') || e.target.classList.contains('cta-secondary')) {
+                         e.preventDefault();
+                         alert('Merci pour votre intérêt ! Contactez-nous à contact@agent-deployer.dev pour démarrer votre projet.');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
